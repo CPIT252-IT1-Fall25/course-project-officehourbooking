@@ -2,7 +2,7 @@ spring:
   application:
     name: office-hours-booking
   profiles:
-    acttive: dev
+    active: dev
 
 server:
   port: 8080

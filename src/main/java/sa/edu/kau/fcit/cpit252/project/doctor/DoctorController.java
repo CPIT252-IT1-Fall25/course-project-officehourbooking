@@ -1,6 +1,10 @@
 package sa.edu.kau.fcit.cpit252.project.doctor;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +20,17 @@ public class DoctorController {
 
     @GetMapping
     public List<Doctor> list() { return repo.findAll(); }
+
+    @GetMapping("/search")
+    public Page<Doctor> search(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String specialty,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+        return repo.searchByNameAndSpecialty(name, specialty, pageable);
+    }
 
     @GetMapping("/{id}")
     public Doctor get(@PathVariable Long id) {
@@ -56,4 +71,3 @@ public class DoctorController {
         repo.deleteById(id);
     }
 }
-
