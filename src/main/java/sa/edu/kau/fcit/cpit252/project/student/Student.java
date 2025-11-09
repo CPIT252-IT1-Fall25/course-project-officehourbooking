@@ -1,6 +1,5 @@
 package sa.edu.kau.fcit.cpit252.project.student;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
