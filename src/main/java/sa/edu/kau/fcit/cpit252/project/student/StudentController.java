@@ -6,41 +6,41 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/students")
-public class StudentController{
+public class StudentController {
+
     private final StudentRepository repo;
 
-    public StudentController(StudentRepository repo){
+    public StudentController(StudentRepository repo) {
         this.repo = repo;
     }
 
     @GetMapping
-    public List<Student> list(){
+    public List<Student> list() {
         return repo.findAll();
     }
 
     @GetMapping("/{id}")
-    public Student get(@PathVariable Long id){
-        return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"student not found"));
+    public Student get(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "student not found"));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Student create(@Valid @RequestBody Student stu){
-        if(repo.existsByEmail(stu.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"student email already exist");
+    public Student create(@Valid @RequestBody Student stu) {
+        if (repo.existsByEmail(stu.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "student email already exist");
         }
         return repo.save(stu);
     }
 
     @PutMapping("/{id}")
-    public Student update(@PathVariable Long id, @Valid @RequestBody Student stu){
-        Student existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"student not found"));
+    public Student update(@PathVariable Long id, @Valid @RequestBody Student stu) {
+        Student existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "student not found"));
 
-        if(!existing.getEmail().equals(stu.getEmail()) && repo.existsByEmail(stu.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"email already exist");
+        if (!existing.getEmail().equals(stu.getEmail()) && repo.existsByEmail(stu.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "email already exist");
         }
         existing.setName(stu.getName());
         existing.setEmail(stu.getEmail());

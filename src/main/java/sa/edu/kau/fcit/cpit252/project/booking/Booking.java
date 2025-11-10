@@ -7,7 +7,7 @@ import sa.edu.kau.fcit.cpit252.project.student.Student;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "booking", uniqueConstraints = @UniqueConstraint(columnNames = {"doctor_id", "start_time"}))
+@Table(name = "bookings", uniqueConstraints = @UniqueConstraint(columnNames = {"doctor_id", "start_time"}))
 public class Booking {
 
     @Id
