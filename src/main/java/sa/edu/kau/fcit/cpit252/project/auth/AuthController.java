@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sa.edu.kau.fcit.cpit252.project.auth.dto.LoginRequest;
 import sa.edu.kau.fcit.cpit252.project.auth.dto.LoginResponse;
+import sa.edu.kau.fcit.cpit252.project.auth.dto.SignupRequest;
+import sa.edu.kau.fcit.cpit252.project.auth.dto.SignupResponse;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,6 +25,11 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+        SignupResponse response = authService.signup(request);
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/check-email")
     public ResponseEntity<String> checkEmailType(@RequestParam String email) {
         if (email.endsWith("@stu.kau.edu.sa")) {
