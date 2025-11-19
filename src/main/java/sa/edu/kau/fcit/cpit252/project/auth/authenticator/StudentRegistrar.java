@@ -3,6 +3,7 @@ package sa.edu.kau.fcit.cpit252.project.auth.authenticator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import sa.edu.kau.fcit.cpit252.project.auth.dto.SignupRequest;
 import sa.edu.kau.fcit.cpit252.project.auth.dto.SignupResponse;
 import sa.edu.kau.fcit.cpit252.project.student.Student;
@@ -19,7 +20,7 @@ public class StudentRegistrar implements UserRegistrar {
 
     @Override
     public boolean supports(String email) {
-        return email.toLowerCase().trim().endsWith("@stu.kau.edu.sa");
+        return email.toLowerCase().trim().endsWith(STUDENT_EMAIL_DOMAIN);
     }
 
 
