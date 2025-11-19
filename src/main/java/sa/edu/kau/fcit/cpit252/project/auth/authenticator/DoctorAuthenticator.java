@@ -1,8 +1,10 @@
 package sa.edu.kau.fcit.cpit252.project.auth.authenticator;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
 import sa.edu.kau.fcit.cpit252.project.auth.dto.LoginResponse;
 import sa.edu.kau.fcit.cpit252.project.doctor.Doctor;
 import sa.edu.kau.fcit.cpit252.project.doctor.DoctorRepository;
@@ -12,9 +14,11 @@ public class DoctorAuthenticator implements UserAuthenticator {
 
     private static final String DOCTOR_EMAIL_DOMAIN = "@kau.edu.sa";
     private final DoctorRepository doctorRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DoctorAuthenticator(DoctorRepository doctorRepository) {
+    public DoctorAuthenticator(DoctorRepository doctorRepository, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -28,7 +32,7 @@ public class DoctorAuthenticator implements UserAuthenticator {
                 .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.UNAUTHORIZED, "Invalid email or password"));
 
-        if (!password.equals(doctor.getPassword())) {
+        if (!passwordEncoder.matches(password, doctor.getPassword())) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
