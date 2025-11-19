@@ -1,4 +1,3 @@
-// filepath: /Users/mohammedalharbi/Documents/FCIT/8th semester/CPIT-252/Project/course-project-officehourbooking/src/main/java/sa/edu/kau/fcit/cpit252/project/common/GlobalExceptionHandler.java
 package sa.edu.kau.fcit.cpit252.project.common;
 
 import java.util.HashMap;
