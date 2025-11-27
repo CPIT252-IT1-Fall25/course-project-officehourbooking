@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }) => {
       console.error(`"Login error:` ,error);
       throw error;
     }
-
   };
 
   const checkEmail = async (email) => {
@@ -39,10 +38,14 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     const response = await authService.signup(userData);
+    
     setUser({
+      id: response.id,
       email: response.email,
       name: response.name,
-      role: response.role
+      role: response.role,
+      studentId: response.universityId,
+      specialty: response.specialty
     });
     return response;
   };
