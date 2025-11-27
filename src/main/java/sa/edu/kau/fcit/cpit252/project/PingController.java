@@ -1,4 +1,4 @@
-package sa.edu.kau.fcit.cpit252.project.main;
+package sa.edu.kau.fcit.cpit252.project;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

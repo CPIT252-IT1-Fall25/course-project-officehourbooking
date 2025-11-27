@@ -1,4 +1,4 @@
-package sa.edu.kau.fcit.cpit252.project.main;
+package sa.edu.kau.fcit.cpit252.project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

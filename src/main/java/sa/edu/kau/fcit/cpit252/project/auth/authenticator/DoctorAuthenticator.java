@@ -34,7 +34,7 @@ public class DoctorAuthenticator implements UserAuthenticator {
 
         if (!passwordEncoder.matches(password, doctor.getPassword())) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Invalid email or password");
+                    HttpStatus.UNAUTHORIZED, "Invalid  password");
         }
 
         LoginResponse response = new LoginResponse(
