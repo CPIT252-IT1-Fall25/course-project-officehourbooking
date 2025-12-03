@@ -44,11 +44,34 @@ public class BookingController {
 
     @GetMapping("/doctor/{doctorId}")
     public List<Booking> getDoctorBookings(@PathVariable Long doctorId) {
-        return bookingService.getDoctorBookings(doctorId);
+        List<Booking> bookings = bookingService.getDoctorBookings(doctorId);
+
+        return bookings;
     }
 
     @GetMapping("/student/{studentId}")
     public List<Booking> getStudentBookings(@PathVariable Long studentId) {
-        return bookingService.getStudentBookings(studentId);
+        List<Booking> bookings = bookingService.getDoctorBookings(studentId);
+
+
+        return bookings;
+    }
+
+    @GetMapping
+    public List<Booking> getBookings(
+            @RequestParam(required = false) Long studentId,
+            @RequestParam(required = false) Long doctorId,
+            @RequestParam(required = false) BookingStatus status) {
+
+        if (studentId != null && status != null) {
+            return bookingService.getStudentBookings(studentId);
+        }
+
+        if (doctorId != null && status != null) {
+            return bookingService.getDoctorBookings(doctorId);
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "Must provide studentId or doctorId with status");
     }
 }

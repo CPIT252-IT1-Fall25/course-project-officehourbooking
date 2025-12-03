@@ -21,8 +21,8 @@ public class BookingService {
     private final StudentRepository studentRepository;
 
     public BookingService(BookingRepository bookingRepository,
-            DoctorRepository doctorRepository,
-            StudentRepository studentRepository) {
+                          DoctorRepository doctorRepository,
+                          StudentRepository studentRepository) {
         this.bookingRepository = bookingRepository;
         this.doctorRepository = doctorRepository;
         this.studentRepository = studentRepository;
@@ -64,10 +64,10 @@ public class BookingService {
     }
 
     public List<Booking> getDoctorBookings(Long doctorId) {
-        return bookingRepository.findByDoctorIdAndStatus(doctorId, BookingStatus.CONFIRMED);
+        return bookingRepository.findByDoctorIdOrderByStartTimeDesc(doctorId);
     }
 
     public List<Booking> getStudentBookings(Long studentId) {
-        return bookingRepository.findByStudentIdAndStatus(studentId, BookingStatus.CONFIRMED);
+        return bookingRepository.findByStudentIdOrderByStartTimeDesc(studentId);
     }
 }

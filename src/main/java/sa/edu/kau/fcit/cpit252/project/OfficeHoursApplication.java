@@ -1,9 +1,9 @@
-package sa.edu.kau.fcit.cpit252.project.main;
+package sa.edu.kau.fcit.cpit252.project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = "sa.edu.kau.fcit.cpit252.project")
+@SpringBootApplication
 public class OfficeHoursApplication {
 
     public static void main(String[] args) {
