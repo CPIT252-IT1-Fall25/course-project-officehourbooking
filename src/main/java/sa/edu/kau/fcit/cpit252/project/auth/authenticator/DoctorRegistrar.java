@@ -1,6 +1,7 @@
 package sa.edu.kau.fcit.cpit252.project.auth.authenticator;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sa.edu.kau.fcit.cpit252.project.auth.dto.SignupRequest;
@@ -12,12 +13,14 @@ public class DoctorRegistrar implements UserRegistrar {
 
         private static final String DOCTOR_EMAIL_DOMAIN = "@kau.edu.sa";
         private final DoctorRepository doctorRepository;
+        private final PasswordEncoder passwordEncoder;
 
-        public DoctorRegistrar(DoctorRepository doctorRepository) {
-            this.doctorRepository = doctorRepository;
-        }
+    public DoctorRegistrar(DoctorRepository doctorRepository, PasswordEncoder passwordEncoder) {
+        this.doctorRepository = doctorRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-        @Override
+    @Override
         public boolean supports(String email) {
             return  email.toLowerCase().trim().endsWith(DOCTOR_EMAIL_DOMAIN);
         }
@@ -30,15 +33,25 @@ public class DoctorRegistrar implements UserRegistrar {
                         "A instructor already exists with this email."
                 );
             }
-            Doctor st = new Doctor();
-            st.setName(request.getName());
-            st.setEmail(request.getEmail());
-            st.setPassword(request.getPassword());
-            st.setSpecialty(request.getSpecialty());
+            Doctor dr = new Doctor();
+            dr.setName(request.getName());
+            dr.setEmail(request.getEmail());
+            dr.setPassword(passwordEncoder.encode(request.getPassword()));
+            dr.setSpecialty(request.getSpecialty());
 
-            doctorRepository.save(st);
+            Doctor savedDoctor = doctorRepository.save(dr);
 
-            return new SignupResponse(request.getEmail(),request.getName(),"DOCTOR","Instructor signup successful");
+            SignupResponse response = new SignupResponse(
+                    savedDoctor.getId(),
+                    savedDoctor.getEmail(),
+                    savedDoctor.getName(),
+                    "DOCTOR",
+                    "Instructor signup successful"
+            );
+            response.setSpecialty(savedDoctor.getSpecialty());
+
+            return response;
+
         }
     }
 

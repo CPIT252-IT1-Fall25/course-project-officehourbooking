@@ -3,6 +3,7 @@ package sa.edu.kau.fcit.cpit252.project.student;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +22,11 @@ import jakarta.validation.Valid;
 public class StudentController {
 
     private final StudentRepository repo;
+    private final PasswordEncoder passwordEncoder;
 
-    public StudentController(StudentRepository repo) {
+    public StudentController(StudentRepository repo, PasswordEncoder passwordEncoder) {
         this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -31,10 +34,10 @@ public class StudentController {
         return repo.findAll();
     }
 
-    @SuppressWarnings("null")
     @GetMapping("/{id}")
     public Student get(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "student not found"));
+        return repo.findById(id).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "student not found"));
     }
 
     @PostMapping
@@ -43,29 +46,31 @@ public class StudentController {
         if (repo.existsByEmail(stu.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "student email already exist");
         }
+        stu.setPassword(passwordEncoder.encode(stu.getPassword()));
         return repo.save(stu);
     }
 
     @PutMapping("/{id}")
     public Student update(@PathVariable Long id, @Valid @RequestBody Student stu) {
-        @SuppressWarnings("null")
-        Student existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "student not found"));
+        Student existing = repo.findById(id).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "student not found"));
 
         if (!existing.getEmail().equals(stu.getEmail()) && repo.existsByEmail(stu.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "email already exist");
         }
 
-        if (!existing.getUniversityId().equals(stu.getUniversityId()) && repo.existsByUniversityId(stu.getUniversityId())) {
+        if (!existing.getUniversityId().equals(stu.getUniversityId())
+                && repo.existsByUniversityId(stu.getUniversityId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "university ID already exist");
         }
+
         existing.setName(stu.getName());
         existing.setEmail(stu.getEmail());
         existing.setUniversityId(stu.getUniversityId());
-        existing.setPassword(stu.getPassword());
+        existing.setPassword(passwordEncoder.encode(stu.getPassword()));
         return repo.save(existing);
     }
 
-    @SuppressWarnings("null")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

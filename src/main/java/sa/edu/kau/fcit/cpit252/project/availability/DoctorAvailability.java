@@ -19,9 +19,10 @@ public class DoctorAvailability {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", nullable = false)
     @NotNull
+
     private Doctor doctor;
 
     @Enumerated(EnumType.STRING)

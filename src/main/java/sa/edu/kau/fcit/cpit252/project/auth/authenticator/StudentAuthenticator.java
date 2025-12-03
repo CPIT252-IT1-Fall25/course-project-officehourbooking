@@ -1,8 +1,10 @@
 package sa.edu.kau.fcit.cpit252.project.auth.authenticator;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
 import sa.edu.kau.fcit.cpit252.project.auth.dto.LoginResponse;
 import sa.edu.kau.fcit.cpit252.project.student.Student;
 import sa.edu.kau.fcit.cpit252.project.student.StudentRepository;
@@ -12,9 +14,11 @@ public class StudentAuthenticator implements UserAuthenticator {
 
     private static final String STUDENT_EMAIL_DOMAIN = "@stu.kau.edu.sa";
     private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public StudentAuthenticator(StudentRepository studentRepository) {
+    public StudentAuthenticator(StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -26,11 +30,10 @@ public class StudentAuthenticator implements UserAuthenticator {
     public LoginResponse authenticate(String email, String password) {
         Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Invalid email or password"));
+                HttpStatus.UNAUTHORIZED, "Invalid credentials"));
 
-        if (!password.equals(student.getPassword())) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Invalid email or password");
+        if (!passwordEncoder.matches(password, student.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
         LoginResponse response = new LoginResponse(
